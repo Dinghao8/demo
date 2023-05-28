@@ -1,4 +1,9 @@
 hello matherfucker
+<<<<<<< HEAD
 add new feature	
 hello everyday
-
+=======
+add new feature
+hello everyday
+非官方苟富贵
+>>>>>>> test
