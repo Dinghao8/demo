@@ -18,6 +18,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/test
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -37,3 +39,11 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: true
           sbom: true
+          
+      - name: Debug metadata
+        run: |
+          echo "=== TAGS OUTPUT ==="
+          echo "${{ steps.meta.outputs.tags }}"
+          echo ""
+          echo "=== ANNOTATIONS OUTPUT ==="
+          echo "${{ steps.meta.outputs.annotations }}"
