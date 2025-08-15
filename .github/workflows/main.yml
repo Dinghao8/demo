@@ -61,6 +61,18 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           call: check
+          file: test.Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          # 要使用的dockerfile文件
+          # tag号
+          tags: ${{secrets.DOCKER_USERNAME}}/test:1.0.2
+          # 注解
+          annotations: ${{ steps.meta.outputs.annotations }}
+          # 来源证明，max为最高级别，min可选
+          provenance: mode=max
+          # Software Bill of Material，软件物料清单，自动生成
+          sbom: true
+          
 
         # 构建并推送镜像
       - name: Build and push Docker image
@@ -71,7 +83,7 @@ jobs:
           # 要使用的dockerfile文件
           file: test.Dockerfile
           # tag号
-          tags: ${{secrets.DOCKER_USERNAME}}/test:1.0.1
+          tags: ${{secrets.DOCKER_USERNAME}}/test:1.0.2
           # 注解
           annotations: ${{ steps.meta.outputs.annotations }}
           # 来源证明，max为最高级别，min可选
