@@ -8,5 +8,5 @@ WORKDIR /demo_project
 COPY /hello.py /demo_project
 ENV FLASK_APP=hello
 EXPOSE 8000
-CMD flask run --host 0.0.0.0 --port 8000
+CMD ["flask" ,"run", "--host 0.0.0.0", "--port 8000"]
 
