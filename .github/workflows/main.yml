@@ -18,11 +18,13 @@ jobs:
     # 为作业设置操作系统
     runs-on: ubuntu-latest
     steps:
-         # github检出代码，可设置名称
+    
+        # github检出代码
       - name: Checkout
         # 使用的操作
         uses: actions/checkout@v4
-
+        
+        # 注解允许您为 OCI 镜像组件（如清单、索引和描述符）指定任意元数据，metadata自动生成符合OCI规范的注解
       - name: Extract Docker image metadata
         # 步骤的唯一标识符。您可以使用此 ID 在上下文中引用该步骤。
         id: meta 
@@ -33,7 +35,8 @@ jobs:
         env:
           # 配置注解级别，默认是manifest(清单),以下为清单和索引都创建注解
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
-
+          
+        # 登录docker hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3.5.0
         with:
@@ -52,11 +55,18 @@ jobs:
           use: true
           # 可定义builder名称
           name: my-builder
-      
+
+        # 不实际运行构建的情况下检查build
+      - name: check build
+        uses: docker/build-push-action@v6
+        with:
+          call: check
+
+        # 构建并推送镜像
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          # 条件判断，当不是pr时触发
+          # 条件判断，当不是pr时触发推送
           push: ${{ github.event_name != 'pull_request' }}
           # 要使用的dockerfile文件
           file: test.Dockerfile
@@ -68,7 +78,8 @@ jobs:
           provenance: mode=max
           # Software Bill of Material，软件物料清单，自动生成
           sbom: true
-          
+        
+        #debug调试信息
       - name: Debug metadata
         run: |
           echo "=== TAGS OUTPUT ==="
@@ -76,6 +87,7 @@ jobs:
           echo "--------------------------------"
           echo "=== ANNOTATIONS OUTPUT ==="
           echo "${{ steps.meta.outputs.annotations }}"
-          
-      - name: 构建完成
+
+        # 构建结束
+      - name: build finished
         run: echo "success!"
