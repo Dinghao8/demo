@@ -34,7 +34,7 @@ jobs:
           images: ${{secrets.DOCKER_USERNAME}}/test
         env:
           # 配置注解级别，默认是manifest(清单),以下为清单和索引都创建注解
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
           
         # 登录docker hub
       - name: Log in to Docker Hub
@@ -55,14 +55,13 @@ jobs:
           use: true
           # 可定义builder名称
           name: my-builder
+          platforms: linux/amd64,linux/arm64
 
         # 不实际运行构建的情况下检查build
       - name: check build
         uses: docker/build-push-action@v6
         with:
           call: check
-          platforms: |
-            "linux/amd64","linux/arm64","windows/amd64"
           push: ${{ github.event_name != 'pull_request' }}
           # 要使用的dockerfile文件
           file: test.Dockerfile
