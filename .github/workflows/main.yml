@@ -34,7 +34,7 @@ jobs:
           images: ${{secrets.DOCKER_USERNAME}}/test
         env:
           # 配置注解级别，默认是manifest(清单),以下为清单和索引都创建注解
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest
           
         # 登录docker hub
       - name: Log in to Docker Hub
