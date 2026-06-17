@@ -23,3 +23,4 @@ except KeyboardInterrupt as e:
   channel.basic_cancel("id3")
   channel.close()
   print("通过已关闭，有缘再会啊！")
+print(“这是新加的")
